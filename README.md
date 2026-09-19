@@ -10,12 +10,53 @@ End-to-end machine maintenance and reliability analytics project combining Pytho
 
 ## Project Overview
 
-This project analyzes machine maintenance, failure, and telemetry data to explore equipment reliability and maintenance patterns. The analysis was developed in Power BI using a relational data model connecting machine, maintenance, failure, error, telemetry, date, and component data.
+This project analyzes machine maintenance, failure, error, and telemetry data to explore equipment reliability, maintenance patterns, and operational behavior across a fleet of machines.
 
-The dashboard provides three analytical views: an operational overview of machine failures and maintenance activities, machine-level health and telemetry analysis, and a deeper assessment of maintenance strategy and reliability patterns.
+The analysis follows an end-to-end workflow combining Python and Pandas for data preparation, Jupyter Notebook for exploratory analysis, PostgreSQL and SQL for structured querying and validation, Excel for additional data auditing, and Power BI for dimensional modeling, DAX analysis, and interactive visualization.
 
-Beyond dashboard development, the project includes dimensional data modeling, DAX-based KPI development, exploratory analysis, correlation analysis, and data-quality validation to ensure that observed patterns are interpreted appropriately.
+The final Power BI dashboard provides three analytical views: an operational overview of machine failures and maintenance activities, machine-level health and telemetry analysis, and a deeper assessment of maintenance strategy and reliability patterns.
 
+Beyond dashboard development, the project includes exploratory data analysis, dimensional data modeling, KPI development, correlation analysis, and data-quality validation to ensure that observed patterns are interpreted appropriately.
+
+## Repository Structure
+
+```text
+Machine-Maintenance-Reliability-Analytics/
+├── dashboard/
+│   ├── maintenance_dashboard.pbix
+│   ├── power_bi_measures.dax
+│   └── README.md
+│
+├── data/
+│   ├── raw/                 # Original source data
+│   └── processed/           # Cleaned and analytical datasets
+│
+├── docs/
+│   ├── POWER_BI_GUIDE_ID.md
+│   └── SETUP_GUIDE_ID.md
+│
+├── excel/
+│   └── maintenance_data_audit.xlsx
+│
+├── images/                  # EDA outputs and dashboard screenshots
+│
+├── notebooks/
+│   └── exploratory_analysis.ipynb
+│
+├── scripts/
+│   ├── clean_data.py
+│   ├── download_data.py
+│   └── run_eda.py
+│
+├── sql/
+│   ├── 01_schema_postgresql.sql
+│   ├── 02_load_postgresql.sql
+│   └── 03_analysis_queries.sql
+│
+├── .gitignore
+├── README.md
+└── requirements.txt
+```
 ## Business Questions
 
 This project was designed to answer the following analytical questions:
