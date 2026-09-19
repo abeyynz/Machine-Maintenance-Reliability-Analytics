@@ -1,0 +1,6 @@
+table,rows_raw,columns,duplicate_rows_raw,missing_cells_raw,rows_clean,duplicate_rows_clean,missing_cells_clean
+telemetry,876100,6,0,0,876100,0,0
+errors,3919,3,0,0,3919,0,0
+maintenance,3286,3,0,0,3286,0,0
+failures,761,3,0,0,761,0,0
+machines,100,3,0,0,100,0,0

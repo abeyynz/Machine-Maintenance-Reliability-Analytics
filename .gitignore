@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.env
+*.pyc
+~$*.pbix
+*.tmp
+Thumbs.db
+desktop.ini
+.vscode/
+
+# Large data files
+data/raw/PdM_telemetry.csv
+data/processed/telemetry_clean.csv

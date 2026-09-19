@@ -1,0 +1,21 @@
+Total Maintenance = COUNTROWS(maintenance)
+
+Total Failures = COUNTROWS(failures)
+
+Unique Assets = DISTINCTCOUNT(machines[machineID])
+
+Reactive Maintenance =
+CALCULATE([Total Maintenance], maintenance[maintenance_type] = "Reactive")
+
+Proactive Maintenance =
+CALCULATE([Total Maintenance], maintenance[maintenance_type] = "Proactive")
+
+Reactive Rate = DIVIDE([Reactive Maintenance], [Total Maintenance], 0)
+
+Proactive Rate = DIVIDE([Proactive Maintenance], [Total Maintenance], 0)
+
+Failures per Asset = DIVIDE([Total Failures], [Unique Assets], 0)
+
+Total Errors = COUNTROWS(errors)
+
+Avg Machine Age = AVERAGE(machines[age])
