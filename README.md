@@ -2,6 +2,12 @@
 
 Power BI analytics project exploring machine failures, maintenance strategies, equipment health, and telemetry patterns to support reliability analysis and maintenance decision-making.
 
+### Project Highlights
+
+**100 Machines** · **761 Failure Incidents** · **3,286 Maintenance Records** · **98% Assets with Recorded Failure**
+
+`Power BI` `Power Query` `DAX` `Data Modeling` `Reliability Analytics`
+
 ## Project Overview
 
 This project analyzes machine maintenance, failure, and telemetry data to explore equipment reliability and maintenance patterns. The analysis was developed in Power BI using a relational data model connecting machine, maintenance, failure, error, telemetry, date, and component data.
@@ -22,6 +28,21 @@ This project was designed to answer the following analytical questions:
 - Which components should be prioritized for further reliability investigation?
 - Are there data coverage or quality issues that could affect the interpretation of telemetry trends?
 
+## Dataset
+
+This project uses the **Microsoft Azure Predictive Maintenance** dataset available on Kaggle.
+
+The dataset contains operational data from a fleet of machines and is organized into multiple related tables:
+
+- **Machines** — machine ID, model, and age.
+- **Telemetry** — hourly sensor readings including voltage, rotation, pressure, and vibration.
+- **Failures** — recorded component failure events for each machine.
+- **Maintenance** — component replacement and maintenance records.
+- **Errors** — machine error events recorded during operation.
+
+The dataset structure enables machine-level, component-level, and time-based analysis by connecting operational telemetry with maintenance and failure history.
+
+**Dataset Source:** [Microsoft Azure Predictive Maintenance — Kaggle](https://www.kaggle.com/datasets/arnabbiswas1/microsoft-azure-predictive-maintenance)
 
 ## Data Model
 
@@ -97,3 +118,55 @@ Focuses on machine-level condition and sensor behavior. The page combines failur
 Analyzes maintenance strategy and reliability patterns, including proactive and reactive maintenance, component-level maintenance activity, reactive maintenance rates, and the relationship between maintenance activity and failure incidents.
 
 ![Maintenance & Reliability Dashboard](images/dashboard-maintenance-reliability.png)
+
+## Key Findings
+
+- **Failure exposure is widespread.** 98 out of 100 machines (98%) recorded at least one failure during the observed period.
+
+- **Component 2 shows the strongest reliability concern.** It recorded 259 failure incidents (34.0% of all failures), the highest reactive maintenance rate at 30%, and the highest failure-to-maintenance ratio at 30.01%.
+
+- **Maintenance activities are predominantly proactive.** Of 3,286 maintenance records, 2,543 (77.39%) were proactive, while 743 (22.61%) were reactive.
+
+- **Failure activity peaked in January 2015.** January recorded 94 failure incidents, followed by a decline in February to 50. From March to December, monthly failures remained relatively stable at 58–69 incidents.
+
+- **Machine age has a moderate positive association with failure frequency.** The Pearson correlation between machine age and failure incidents was 0.48, indicating that older machines tended to record more failures, although age alone does not explain failure behavior.
+
+- **Maintenance activity and failures showed a weak-to-moderate negative association in 2015.** The monthly Pearson correlation was -0.36. This relationship is descriptive and should not be interpreted as evidence that maintenance activity directly caused the reduction in failures.
+
+- **January 2016 telemetry has incomplete coverage.** Only 700 telemetry records were available compared with approximately 67,200–74,400 records in full months during 2015. January 2016 telemetry changes should therefore not be interpreted as directly comparable full-month trends.
+
+## Recommendations
+
+Based on the analysis, the following actions could support further reliability and maintenance improvement:
+
+- **Prioritize Component 2 for further reliability investigation.** Review its recurring failure modes, maintenance history, and maintenance intervals because it recorded the highest failure count, reactive maintenance rate, and failure-to-maintenance ratio.
+
+- **Incorporate machine age into maintenance prioritization.** Machine age can be considered alongside failure history, component condition, and telemetry indicators when identifying assets that may require closer monitoring.
+
+- **Continue monitoring the balance between proactive and reactive maintenance.** Although proactive maintenance represents 77.39% of maintenance activity, reactive maintenance still accounts for 22.61% and varies across components.
+
+- **Investigate recurring failure patterns at the machine level.** Machines with repeated failure incidents can be reviewed individually to identify recurring component issues and determine whether maintenance schedules require adjustment.
+
+- **Improve telemetry data completeness and coverage validation.** Partial periods should be flagged or excluded from full-month comparisons to prevent incomplete data from being interpreted as operational changes.
+
+## Data Limitations
+
+Several limitations should be considered when interpreting the results:
+
+- **January 2016 contains partial telemetry data.** Only 700 telemetry records are available, substantially fewer than the approximately 67,200–74,400 records observed in full months during 2015. Therefore, January 2016 telemetry values should not be directly compared with full-month periods.
+
+- **Correlation does not imply causation.** The relationships between machine age and failures, as well as maintenance activity and failures, describe statistical associations only and do not establish causal effects.
+
+- **Failure counts do not represent failure severity.** Each recorded failure is treated as an incident, while information such as downtime, repair cost, operational impact, and failure severity is not included in the analysis.
+
+- **Maintenance volume does not directly measure maintenance effectiveness.** The failure-to-maintenance ratio is used as a descriptive indicator and should not be interpreted as a direct measure of maintenance performance.
+
+- **Telemetry is analyzed primarily at an aggregate level.** Additional machine-level thresholds, anomaly detection, or failure-window analysis would be required to determine whether specific sensor patterns precede individual failures.
+
+## Tools & Technologies
+
+- **Power BI Desktop** — dashboard development and interactive data visualization
+- **Power Query** — data preparation and transformation
+- **DAX** — KPI development, analytical measures, and correlation analysis
+- **Data Modeling** — dimensional modeling and relationship design
+- **GitHub** — project documentation and version control
