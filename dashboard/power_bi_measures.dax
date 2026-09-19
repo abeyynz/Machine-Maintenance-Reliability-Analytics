@@ -1,21 +1,165 @@
-Total Maintenance = COUNTROWS(maintenance)
+// ============================================================
+// Machine Maintenance & Reliability Analytics
+// Power BI DAX Measures
+// ============================================================
 
-Total Failures = COUNTROWS(failures)
 
-Unique Assets = DISTINCTCOUNT(machines[machineID])
+// ------------------------------------------------------------
+// ASSET & FAILURE KPIs
+// ------------------------------------------------------------
 
-Reactive Maintenance =
-CALCULATE([Total Maintenance], maintenance[maintenance_type] = "Reactive")
+Total Assets =
+DISTINCTCOUNT ( Machines[machine_id] )
+
+Failure Incidents =
+COUNTROWS ( Failures )
+
+Machines with Failure =
+DISTINCTCOUNT ( Failures[machine_id] )
+
+Asset Failure % =
+DIVIDE (
+    [Machines with Failure],
+    [Total Assets],
+    0
+)
+
+Total Failures =
+COUNTROWS ( Failures )
+
+Total Errors =
+COUNTROWS ( Errors )
+
+
+// ------------------------------------------------------------
+// MAINTENANCE KPIs
+// ------------------------------------------------------------
+
+Total Maintenance =
+COUNTROWS ( Maintenance )
 
 Proactive Maintenance =
-CALCULATE([Total Maintenance], maintenance[maintenance_type] = "Proactive")
+CALCULATE (
+    [Total Maintenance],
+    Maintenance[maintenance_type] = "Proactive"
+)
 
-Reactive Rate = DIVIDE([Reactive Maintenance], [Total Maintenance], 0)
+Reactive Maintenance =
+CALCULATE (
+    [Total Maintenance],
+    Maintenance[maintenance_type] = "Reactive"
+)
 
-Proactive Rate = DIVIDE([Proactive Maintenance], [Total Maintenance], 0)
+Reactive Maintenance % =
+DIVIDE (
+    [Reactive Maintenance],
+    [Total Maintenance],
+    0
+)
 
-Failures per Asset = DIVIDE([Total Failures], [Unique Assets], 0)
+Failure per Maintenance =
+DIVIDE (
+    [Failure Incidents],
+    [Total Maintenance],
+    0
+)
 
-Total Errors = COUNTROWS(errors)
 
-Avg Machine Age = AVERAGE(machines[age])
+// ------------------------------------------------------------
+// TELEMETRY KPIs
+// ------------------------------------------------------------
+
+Avg Voltage =
+AVERAGE ( Telemetry[volt] )
+
+Avg Rotation =
+AVERAGE ( Telemetry[rotate] )
+
+Avg Pressure =
+AVERAGE ( Telemetry[pressure] )
+
+Avg Vibration =
+AVERAGE ( Telemetry[vibration] )
+
+Telemetry Records =
+COUNTROWS ( Telemetry )
+
+
+// ------------------------------------------------------------
+// EXPLORATORY ANALYSIS
+// ------------------------------------------------------------
+
+Age-Failure Correlation =
+VAR MachineData =
+    FILTER (
+        ADDCOLUMNS (
+            VALUES ( Machines[machine_id] ),
+            "MachineAge", CALCULATE ( MAX ( Machines[age] ) ),
+            "FailureCount", CALCULATE ( [Failure Incidents] )
+        ),
+        NOT ISBLANK ( [MachineAge] )
+            && NOT ISBLANK ( [FailureCount] )
+    )
+VAR AvgAge =
+    AVERAGEX ( MachineData, [MachineAge] )
+VAR AvgFailure =
+    AVERAGEX ( MachineData, [FailureCount] )
+VAR Numerator =
+    SUMX (
+        MachineData,
+        ( [MachineAge] - AvgAge )
+            * ( [FailureCount] - AvgFailure )
+    )
+VAR Denominator =
+    SQRT (
+        SUMX (
+            MachineData,
+            POWER ( [MachineAge] - AvgAge, 2 )
+        )
+        *
+        SUMX (
+            MachineData,
+            POWER ( [FailureCount] - AvgFailure, 2 )
+        )
+    )
+RETURN
+    DIVIDE ( Numerator, Denominator )
+
+
+Maintenance-Failure Correlation =
+VAR MonthlyData =
+    FILTER (
+        ADDCOLUMNS (
+            VALUES ( DateTable[Year Month] ),
+            "FailureCount", CALCULATE ( [Failure Incidents] ),
+            "MaintenanceCount", CALCULATE ( [Total Maintenance] )
+        ),
+        NOT ISBLANK ( [FailureCount] )
+            && NOT ISBLANK ( [MaintenanceCount] )
+            && [FailureCount] > 0
+            && [MaintenanceCount] > 0
+    )
+VAR AvgFailure =
+    AVERAGEX ( MonthlyData, [FailureCount] )
+VAR AvgMaintenance =
+    AVERAGEX ( MonthlyData, [MaintenanceCount] )
+VAR Numerator =
+    SUMX (
+        MonthlyData,
+        ( [FailureCount] - AvgFailure )
+            * ( [MaintenanceCount] - AvgMaintenance )
+    )
+VAR Denominator =
+    SQRT (
+        SUMX (
+            MonthlyData,
+            POWER ( [FailureCount] - AvgFailure, 2 )
+        )
+        *
+        SUMX (
+            MonthlyData,
+            POWER ( [MaintenanceCount] - AvgMaintenance, 2 )
+        )
+    )
+RETURN
+    DIVIDE ( Numerator, Denominator )
